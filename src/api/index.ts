@@ -101,7 +101,7 @@ export class SimpleWarpAPI {
         }
 
         const data = warps[warp];
-        player.teleport(Vec3.create(data.blockpos.x+0.5, data.blockpos.y+0.5, data.blockpos.z+0.5), data.dimension, Vec3.create(player.getRotation().x, player.getPosition().y, 10));
+        player.teleport(Vec3.create(data.blockpos.x+0.5, data.blockpos.y+0.5, data.blockpos.z+0.5), data.dimension, Vec3.create(player.getRotation().x, player.getRotation().y, player.getPosition().z);
         player.sendMessage(`§aTeleport to §e${warp}`);
         return true;
     }
