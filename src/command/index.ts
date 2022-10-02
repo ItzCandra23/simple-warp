@@ -135,4 +135,44 @@ command.register(`editwarp`, `Edit a warp position and dimension.`, CommandPermi
     pos: CommandPosition,
     dimension: command.enum("CommandDimension", "overworld", "nether", "theend")
 });
+
+command.register("warpsave", "Save a simple-warp plugin.", CommandPermissionLevel.Operator)
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) return;
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    SimpleWarpAPI.writeFile(pl);
+}, {})
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) return;
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    SimpleWarpAPI.writeConfigFile(pl);
+}, {
+    config: command.enum("warpsave_config", "config")
+})
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) return;
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    SimpleWarpAPI.writeWarpsFile(pl);
+}, {
+    warps: command.enum("warpsave_warps", "warps")
+})
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) return;
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    SimpleWarpAPI.writeFile(pl);
+}, {
+    all: command.enum("warpsave_all", "all")
+});
 });

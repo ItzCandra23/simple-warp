@@ -76,22 +76,34 @@ export class SimpleWarpAPI {
             return true;
         }
     }
-    /**WriteFile. */
-    static writeFile(): void {
+    /**WriteConfigFile. */
+    static writeConfigFile(actor?: ServerPlayer): void {
         writeFile(__dirname + "../../../config.json", JSON.stringify(config), (err) => {
             if (err) {
                 console.log(`[Simple-Warp] config.json Error: \n${err}`);
+                actor?.sendMessage(`[Simple-Warp] config.json Faild to save! Error: \n${err}`);
             } else {
                 console.log(`[Simple-Warp] config.json Saved!`);
+                actor?.sendMessage(`[Simple-Warp] config.json Success to save!`);
             }
         });
+    }
+    /**WriteWarpsFile. */
+    static writeWarpsFile(actor?: ServerPlayer): void {
         writeFile(__dirname + "../../../warps.json", JSON.stringify(warps), (err) => {
             if (err) {
                 console.log(`[Simple-Warp] warps.json Error: \n${err}`);
+                actor?.sendMessage(`[Simple-Warp] warps.json Faild to save! Error: \n${err}`);
             } else {
                 console.log(`[Simple-Warp] warps.json Saved!`);
+                actor?.sendMessage(`[Simple-Warp] warps.json Success to save!`);
             }
         });
+    }
+    /**WriteAllFile. */
+    static writeFile(actor?: ServerPlayer): void {
+        this.writeConfigFile(actor);
+        this.writeWarpsFile(actor);
     }
     /**Teleport player to warp. */
     static teleport(player: ServerPlayer, warp: string): boolean {
@@ -101,7 +113,7 @@ export class SimpleWarpAPI {
         }
 
         const data = warps[warp];
-        player.teleport(Vec3.create(data.blockpos.x+0.5, data.blockpos.y+0.5, data.blockpos.z+0.5), data.dimension, Vec3.create(player.getRotation().x, player.getRotation().y, player.getPosition().z);
+        player.teleport(Vec3.create(data.blockpos.x+0.5, data.blockpos.y+0.5, data.blockpos.z+0.5), data.dimension, Vec3.create(data.blockpos.x, data.blockpos.y, player.getRotation().y));
         player.sendMessage(`§aTeleport to §e${warp}`);
         return true;
     }
