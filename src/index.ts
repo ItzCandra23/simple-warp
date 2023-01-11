@@ -1,10 +1,3 @@
-import "./api";
+import "./warps";
 import "./form";
-import "./command";
-import { events } from "bdsx/event";
-import { SimpleWarpAPI } from "./api";
-
-
-events.serverStop.on(() => {
-    SimpleWarpAPI.writeFile();
-});
+import "./commands";
