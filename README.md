@@ -7,5 +7,3 @@ Warp plugin for BDSX.
 * /editwarp - Edit a warp position and dimension.
 * /removewarp - Remove a warp.
 * /warpsave - Save a simple-warp plugin.
-# Update 1.1.0
-* Fix bugs.

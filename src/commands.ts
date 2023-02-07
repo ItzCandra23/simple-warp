@@ -1,14 +1,11 @@
 import { DimensionId } from "bdsx/bds/actor";
-import { BlockPos, Vec3 } from "bdsx/bds/blockpos";
+import { Vec3 } from "bdsx/bds/blockpos";
 import { CommandPermissionLevel, CommandPosition } from "bdsx/bds/command";
 import { command } from "bdsx/command";
 import { bool_t, CxxString } from "bdsx/nativetype";
-import { SimpleWarp } from "./warps";
 import { SimpleWarpUI } from "./form";
-
-let warpNames: Record<string, string> = {};
-
-export const WarpsCommandSelector = command.enum("WarpsCommandSelector", warpNames);
+import { SimpleWarp } from "..";
+import { WarpConfig } from ".";
 
 //warp command
 command.register(`warp`, `Warps to a defined warp.`)
@@ -158,34 +155,46 @@ command.register("warpsave", "Save a simple-warp plugin.", CommandPermissionLeve
 .overload((p, o) => {
     const entity = o.getEntity();
     if (entity === null) {
-        if (p.config === "warps") SimpleWarp.configSave(true);
-        if (p.config === "config") SimpleWarp.warpsSave(true);
-        if (p.config === "all") SimpleWarp.save(true);
+        if (p.config === "warps") SimpleWarp.save(true);
+        if (p.config === "config") WarpConfig.save(true);
+        if (p.config === "all") {
+            SimpleWarp.save(true);
+            WarpConfig.save(true);
+        }
         return;
     }
     const pl = entity.getNetworkIdentifier().getActor();
     if (pl === null) return;
 
-    if (p.config === "warps") SimpleWarp.configSave(true, pl);
-    if (p.config === "config") SimpleWarp.warpsSave(true, pl);
-    if (p.config === "all") SimpleWarp.save(true, pl);
+    if (p.config === "warps") SimpleWarp.save(true, pl);
+    if (p.config === "config") WarpConfig.save(true, pl);
+    if (p.config === "all") {
+        SimpleWarp.save(true, pl);
+        WarpConfig.save(true, pl);
+    }
 }, {
     config: command.enum("WarpSaveSelector", "config", "warps", "all"),
 })
 .overload((p, o) => {
     const entity = o.getEntity();
     if (entity === null) {
-        if (p.config === "warps") SimpleWarp.configSave(p.sendMessage);
-        if (p.config === "config") SimpleWarp.warpsSave(p.sendMessage);
-        if (p.config === "all") SimpleWarp.save(p.sendMessage);
+        if (p.config === "warps") SimpleWarp.save(p.sendMessage);
+        if (p.config === "config") WarpConfig.save(p.sendMessage);
+        if (p.config === "all") {
+            SimpleWarp.save(p.sendMessage);
+            WarpConfig.save(p.sendMessage);
+        }
         return;
     }
     const pl = entity.getNetworkIdentifier().getActor();
     if (pl === null) return;
 
-    if (p.config === "warps") SimpleWarp.configSave(p.sendMessage, pl);
-    if (p.config === "config") SimpleWarp.warpsSave(p.sendMessage, pl);
-    if (p.config === "all") SimpleWarp.save(p.sendMessage, pl);
+    if (p.config === "warps") SimpleWarp.save(p.sendMessage, pl);
+    if (p.config === "config") WarpConfig.save(p.sendMessage, pl);
+    if (p.config === "all") {
+        SimpleWarp.save(p.sendMessage, pl);
+        WarpConfig.save(p.sendMessage, pl);
+    }
 }, {
     config: command.enum("WarpSaveSelector", "config", "warps", "all"),
     sendMessage: bool_t,

@@ -1,6 +1,7 @@
-import { Form, FormButton, FormData, SimpleForm } from "bdsx/bds/form";
+import { FormButton, SimpleForm } from "bdsx/bds/form";
 import { ServerPlayer } from "bdsx/bds/player";
-import { config, SimpleWarp } from "./warps";
+import { SimpleWarp } from "..";
+import { WarpConfig } from ".";
 
 export class SimpleWarpUI {
     /**Open WarpsUI for teleport */
@@ -9,10 +10,10 @@ export class SimpleWarpUI {
         const data = SimpleWarp.getWarps();
 
         data.forEach(v => {
-            b.push(new FormButton(config.button.replace("%warp%", v) ?? v));
+            b.push(new FormButton(WarpConfig.getTeleportButton().replace("%warp%", v) ?? v));
         });
 
-        new SimpleForm(config.title ?? "§l§2Simple§e-§dWarp", config.content.replace("%player%", player.getName()) ?? "", b)
+        new SimpleForm( WarpConfig.getTitle() ?? "§l§2Simple§e-§dWarp", WarpConfig.getContent().replace("%player%", player.getNameTag()) ?? "", b)
         .sendTo(player.getNetworkIdentifier(), (f) => {
             const r = f.response;
             if (r === null) return;
