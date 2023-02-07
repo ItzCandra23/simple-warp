@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMessage = exports.send = void 0;
-const name = "RankPerms";
+const name = "SimpleWarp";
 /**Send message to player or console. */
 var send;
 (function (send) {
