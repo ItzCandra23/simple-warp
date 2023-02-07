@@ -1,6 +1,6 @@
 import { ServerPlayer } from "bdsx/bds/player";
 
-const name = "RankPerms";
+const name = "SimpleWarp";
 
 /**Send message to player or console. */
 export namespace send {
