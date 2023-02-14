@@ -1,6 +1,6 @@
 {
   "name": "@bdsx/simple-warp",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Warp plugin for BDSX.",
   "main": "index.js",
   "keywords": [ "warp", "warps", "warpui", "plugin", "BDSX" ],
