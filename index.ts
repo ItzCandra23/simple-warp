@@ -84,7 +84,7 @@ export namespace SimpleWarp {
 
     /**Save warps.json file. */
     export function save(message: boolean = false, actor?: ServerPlayer): void {
-        fs.writeFile(warpsPath, JSON.stringify(warps), (err) => {
+        fs.writeFile(warpsPath, JSON.stringify(warps, null, 2), (err) => {
             if (message) {
                 if (err) {
                     send.error(`warps.json ${err}`, actor);
@@ -104,7 +104,7 @@ export namespace SimpleWarp {
 
         const data = warps[warp];
         const pos = data.blockpos;
-        const posFix = Vec3.create(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z));
+        const posFix = Vec3.create(Math.floor(pos.x)+0.5, Math.floor(pos.y)+0.5, Math.floor(pos.z)+0.5);
         player.teleport(posFix);
         player.sendMessage(`§aTeleport to §e${warp}`);
         return true;
