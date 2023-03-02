@@ -4,6 +4,7 @@ import { Vec3 } from "bdsx/bds/blockpos";
 import { events } from "bdsx/event";
 import { send } from "./src/utils/message";
 import { WarpConfig } from "./src";
+import { VectorXYZ } from "bdsx/common";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -105,8 +106,45 @@ export namespace SimpleWarp {
         const data = warps[warp];
         const pos = data.blockpos;
         const posFix = Vec3.create(Math.floor(pos.x)+0.5, Math.floor(pos.y)+0.5, Math.floor(pos.z)+0.5);
+
+        const hasTimeoutMode = WarpConfig.getTimeout();
+        if (hasTimeoutMode) {
+            let oldPos: VectorXYZ = player.getPosition().toJSON();
+            const playerTag = "inTeleporting";
+
+            const timeout = setTimeout(() => {
+                const newPos = player.getPosition().toJSON();
+                if (newPos.x === oldPos.x && newPos.y === oldPos.y && newPos.z === oldPos.z) {
+                    player.teleport(posFix);
+                    player.sendMessage(`§aTeleported to §e${warp}`);
+                }
+                else {
+                    player.sendMessage(`§cTeleport has cancelled!`);
+                }
+                player.removeTag(playerTag);
+            }, hasTimeoutMode*1000);
+
+            events.playerLeft.on((ev) => {
+                if (ev.player === player) clearTimeout(timeout);
+            });
+
+            if (player.hasTag(playerTag)) {
+                clearTimeout(timeout);
+                player.removeTag(playerTag);
+                player.sendMessage(`§cTeleport has cancelled!`);
+                return false;
+            }
+            else {
+                player.addTag(playerTag);
+                player.sendMessage(`§aTeleporting in ${hasTimeoutMode}s`);
+                player.sendMessage(`§aPlease don't move!`);
+            }
+
+            return true;
+        }
+
         player.teleport(posFix);
-        player.sendMessage(`§aTeleport to §e${warp}`);
+        player.sendMessage(`§aTeleported to §e${warp}`);
         return true;
     }
 }

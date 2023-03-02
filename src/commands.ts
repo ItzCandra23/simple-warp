@@ -2,7 +2,7 @@ import { DimensionId } from "bdsx/bds/actor";
 import { Vec3 } from "bdsx/bds/blockpos";
 import { CommandPermissionLevel, CommandPosition } from "bdsx/bds/command";
 import { command } from "bdsx/command";
-import { bool_t, CxxString } from "bdsx/nativetype";
+import { bool_t, CxxString, int32_t } from "bdsx/nativetype";
 import { SimpleWarpUI } from "./form";
 import { SimpleWarp } from "..";
 import { WarpConfig } from ".";
@@ -137,6 +137,34 @@ command.register(`editwarp`, `Edit a warp position and dimension.`, CommandPermi
     warp: CxxString,
     pos: CommandPosition,
     dimensionId: command.enum("DimensionId", DimensionId),
+});
+
+command.register("warptimeout", "Set warp timeout.", CommandPermissionLevel.Operator)
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) {
+        WarpConfig.setWarpTimeout(p.seconds);
+        return;
+    }
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    WarpConfig.setWarpTimeout(p.seconds);
+}, {
+    seconds: int32_t,
+})
+.overload((p, o) => {
+    const entity = o.getEntity();
+    if (entity === null) {
+        WarpConfig.setWarpTimeout(undefined);
+        return;
+    }
+    const pl = entity.getNetworkIdentifier().getActor();
+    if (pl === null) return;
+
+    WarpConfig.setWarpTimeout(undefined);
+}, {
+    disable: command.enum("WarpTimeoutDisable", "disable"),
 });
 
 //Save

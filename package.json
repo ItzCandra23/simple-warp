@@ -1,13 +1,19 @@
 {
-  "name": "@bdsx/simple-warp",
-  "version": "1.2.0",
-  "description": "Warp plugin for BDSX.",
-  "main": "index.js",
-  "keywords": [ "warp", "warps", "warpui", "plugin", "BDSX" ],
-  "author": "",
-  "license": "ISC",
-  "bdsxPlugin": true,
-  "devDependencies": {
-    "bdsx": "file:../bdsx"
-  }
+    "name": "@bdsx/simple-warp",
+    "version": "1.2.1",
+    "description": "Warp plugin for BDSX.",
+    "main": "index.js",
+    "keywords": [
+        "warp",
+        "warps",
+        "warpui",
+        "plugin",
+        "BDSX"
+    ],
+    "author": "",
+    "license": "ISC",
+    "bdsxPlugin": true,
+    "devDependencies": {
+        "bdsx": "file:../bdsx"
+    }
 }

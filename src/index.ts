@@ -8,11 +8,13 @@ let config: {
     content: string;
     button: string;
     cancel_button: string;
+    timeout?: number;
 } = {
     title: "§l§2Simple§e-§dWarp",
     content: "Hi §e%player%§r, This is WarpUI you can teleport to warp position",
     button: "§l§2%warp%§r\n§7Click to teleport",
     cancel_button: "§l§8[ §cCANCEL §8]§r",
+    timeout: 3,
 };
 
 const configPath = path.join(__dirname, "..", "config.json");
@@ -31,6 +33,13 @@ export namespace WarpConfig {
     }
     export function getCancelButton(): string {
         return config.cancel_button;
+    }
+    export function getTimeout(): number|null {
+        if (!config.timeout || config.timeout < 1) return null;
+        else return config.timeout;
+    }
+    export function setWarpTimeout(seconds?: number): void {
+        config.timeout=seconds;
     }
     export function save(message: boolean = false, actor?: ServerPlayer): void {
         fs.writeFile(configPath, JSON.stringify(config, null, 2), "utf8", (err) => {
