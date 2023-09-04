@@ -1,9 +1,15 @@
 # Simple-Warp
 Warp plugin for BDSX.
+
 # Commands
 * /warp - Teleport to warp.
 * /warpui - Open warp ui.
 * /addwarp - Create a warp.
-* /editwarp - Edit a warp position and dimension.
 * /removewarp - Remove a warp.
-* /warpsave - Save a simple-warp plugin.
+* /setwarp - Change a warp position and dimension.
+
+## Other
+* [Author](https://github.com/ItzCandra23)
+* [SimpleWarp (Github)](https://github.com/ItzCandra23/simple-warp)
+* [SimpleWarp (NPM)](https://www.npmjs.com/package/@bdsx/simple-warp)
+* [Discord](https://discord.gg/nVJ7cbtHgS)

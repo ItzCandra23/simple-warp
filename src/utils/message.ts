@@ -1,50 +1,73 @@
-import { ServerPlayer } from "bdsx/bds/player";
+import { Player } from "bdsx/bds/player";
 
 const name = "SimpleWarp";
 
 /**Send message to player or console. */
-export namespace send {
-    /**Send error message. */
-    export function error(message: string, actor?: ServerPlayer): void {
-        if (actor) actor.sendMessage(`§c${message.replace(/&r/g, "§r§a").replace(/&f/g, "§r")}`);
-        else console.log(`[${name}] Error! ${message.replace(/&r/g, "").replace(/&f/g, "")}`.red);
-    }
-
-    /**Send success message. */
-    export function success(message: string, actor?: ServerPlayer): void {
-        if (actor) actor.sendMessage(`§a${message.replace(/&r/g, "§r§a").replace(/&f/g, "§r").replace(/&e/g, "§e")}`);
-        else console.log(`[${name}] ${message.replace(/&r/g, "").replace(/&f/g, "").replace(/&e/g, "")}`.green);
-    }
-
-    /**Send normal message. */
-    export function msg(message: string, actor?: ServerPlayer): void {
-        if (actor) actor.sendMessage(message.replace(/&r/g, "§r").replace(/&f/g, "§r").replace(/&a/g, "§a").replace(/&e/g, "§e"));
-        else console.log(`[${name}] ${message.replace(/&r/g, "").replace(/&f/g, "").replace(/&a/g, "").replace(/&e/g, "")}`);
-    }
-}
-
-/**Send message to player or console. */
-export class sendMessage {
-    private actor?: ServerPlayer;
-    constructor(actor?: ServerPlayer) {
+export class send {
+    private actor?: Player;
+    constructor(actor?: Player) {
         this.actor=actor;
     }
 
     /**Send error message. */
-    error(message: string): void {
-        if (this.actor) this.actor.sendMessage(`§c${message.replace(/&r/g, "§r§a").replace(/&f/g, "§r")}`);
-        else console.log(`[${name}] Error! ${message.replace(/&r/g, "").replace(/&f/g, "")}`.red);
+    static error(message: string, actor?: Player, replace?: [string, string]|[string, string][]): void {
+        if (replace) message=textReplace(message, replace);
+        if (actor) actor.sendMessage(`§c${message}`);
+        else console.log(`[${name}] Error! ${textFilter(message)}`.red);
     }
 
     /**Send success message. */
-    success(message: string): void {
-        if (this.actor) this.actor.sendMessage(`§a${message.replace(/&r/g, "§r§a").replace(/&f/g, "§r").replace(/&e/g, "§e")}`);
-        else console.log(`[${name}] ${message.replace(/&r/g, "").replace(/&f/g, "").replace(/&e/g, "")}`.green);
+    static success(message: string, actor?: Player, replace?: [string, string]|[string, string][]): void {
+        if (replace) message=textReplace(message, replace);
+        if (actor) actor.sendMessage(`§a${message}`);
+        else console.log(`[${name}] ${textFilter(message)}`.green);
     }
 
     /**Send normal message. */
-    msg(message: string): void {
-        if (this.actor) this.actor.sendMessage(message.replace(/&r/g, "§r").replace(/&f/g, "§r").replace(/&a/g, "§a").replace(/&e/g, "§e"));
-        else console.log(`[${name}] ${message.replace(/&r/g, "").replace(/&f/g, "").replace(/&a/g, "").replace(/&e/g, "")}`);
+    static msg(message: string, actor?: Player, replace?: [string, string]|[string, string][]): void {
+        if (replace) message=textReplace(message, replace);
+        if (actor) actor.sendMessage(message);
+        else console.log(`[${name}] ${textFilter(message)}`);
     }
+
+    /**Send error message. */
+    error(message: string, replace?: [string, string]|[string, string][]): void {
+        if (this.actor) send.error(message, this.actor, replace);
+        else send.error(message);
+    }
+
+    /**Send success message. */
+    success(message: string, replace?: [string, string]|[string, string][]): void {
+        if (this.actor) send.success(message, this.actor, replace);
+        else send.success(message);
+    }
+
+    /**Send normal message. */
+    msg(message: string, replace?: [string, string]|[string, string][]): void {
+        if (this.actor) send.msg(message, this.actor, replace);
+        else send.msg(message);
+    }
+}
+
+function isArrayOfTuples(obj: any): obj is [string, string][] {
+    return Array.isArray(obj) && obj.every(item => Array.isArray(item) && item.length === 2 && typeof item[0] === 'string' && typeof item[1] === 'string');
+}
+
+function textReplace(text: string, replace: [string, string]|[string, string][]): string {
+    if (isArrayOfTuples(replace)) {
+        replace.forEach(([v, w]) => {
+            const reg = new RegExp(v, "g");
+            text=text.replace(reg, w);
+        });
+    }
+    else {
+        const reg = new RegExp(replace[0], "g");
+        text=text.replace(reg, replace[1]);
+    }
+
+    return text;
+}
+
+function textFilter(text: string): string {
+    return text.split("§").map((v) => v.slice(1)).join().replace(/,/g, "");
 }
